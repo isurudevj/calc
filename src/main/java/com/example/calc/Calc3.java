@@ -2,9 +2,11 @@ package com.example.calc;
 
 public class Calc3 {
     private long currentValue;
+    private String op;
 
     private Calc3(double currentValue) {
         this.currentValue = convertLong(currentValue);
+        op = "" + currentValue;
     }
 
     public static Calc3 init(double value) {
@@ -13,17 +15,19 @@ public class Calc3 {
 
     public Calc3 add(double value) {
         currentValue += convertLong(value);
+        op += " + " + value;
         return this;
     }
 
     public Calc3 subtract(double value) {
         currentValue -= convertLong(value);
+        op += " - " + value;
         return this;
     }
 
     public Calc3 multiply(double value) {
-        double interim = currentValue * value;
-        currentValue = convertLong(interim, 1);
+        currentValue = Math.round(currentValue * value);
+        op = "((" + op + ")" + " * " + value + ")";
         return this;
     }
 
@@ -31,11 +35,16 @@ public class Calc3 {
         long base = convertLong(value);
         double interim = (currentValue * 1.0) / base;
         currentValue = convertLong(interim);
+        op = "((" + op + ")" + " / " + value + ")";
         return this;
     }
 
     public double getValue() {
         return (currentValue * 1.0) / 10_000;
+    }
+
+    public String getOp() {
+        return op;
     }
 
     public long convertLong(double val) {

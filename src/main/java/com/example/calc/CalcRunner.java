@@ -42,75 +42,41 @@ public class CalcRunner implements Runnable {
             double value3 = cleanDouble(zeroSafe(random.nextDouble(), random));
             double value4 = cleanDouble(zeroSafe(random.nextDouble(), random));
 
-            long gap1Start = System.currentTimeMillis();
-            double doubleVal1 = Calc1.init(value1)
-                    .subtract(value2)
-                    .subtract(value2)
-                    .subtract(value2)
-                    .multiply(value3)
-                    //.divide(value4)
-                    .multiply(value3)
-                    .multiply(value3)
-                    .add(value4)
-                    .add(value4)
-                    //.divide(value4)
-                    .add(value4)
-                    .getValue();
-            long gap1End = System.currentTimeMillis();
 
             long gap2Start = System.currentTimeMillis();
             double doubleVal2 = doubleToBigD(value1)
-                    .subtract(doubleToBigD(value2))
-                    .subtract(doubleToBigD(value2))
-                    .subtract(doubleToBigD(value2))
-                    //.multiply(doubleToBigD(value3))
-                    //.divide(doubleToBigD(value4), 4, RoundingMode.HALF_UP)
-                    //.multiply(doubleToBigD(value3))
-                    //.multiply(doubleToBigD(value3))
-                    .add(doubleToBigD(value4))
-                    .add(doubleToBigD(value4))
-                    //.divide(doubleToBigD(value4), 4, RoundingMode.HALF_UP)
-                    .add(doubleToBigD(value4))
+                    .multiply(doubleToBigD(value2))
+                    .multiply(doubleToBigD(value3))
+                    .multiply(doubleToBigD(value4))
                     .setScale(4, RoundingMode.HALF_UP)
                     .doubleValue();
+
             long gap2End = System.currentTimeMillis();
 
         long gap3Start = System.currentTimeMillis();
-        double doubleVal3 = Calc3.init(value1)
-                .subtract(value2)
-                .subtract(value2)
-                .subtract(value2)
-                //.multiply(value3)
-                //.divide(value4)
-                //.multiply(value3)
-                //.multiply(value3)
-                .add(value4)
-                .add(value4)
-                //.divide(value4)
-                .add(value4)
+        Calc3 calc3 = Calc3.init(value1)
+                .multiply(value2)
+                .multiply(value3)
+                .multiply(value4);
+
+        double doubleVal3 = calc3
                 .getValue();
         long gap3End = System.currentTimeMillis();
 
-            long gap1 = gap1End - gap1Start;
+
             long gap2 = gap2End - gap2Start;
             long gap3 = gap3End - gap3Start;
 
             total++;
 
 
-            timer1.record(gap1, TimeUnit.MILLISECONDS);
             timer2.record(gap2, TimeUnit.MILLISECONDS);
             timer3.record(gap3, TimeUnit.MILLISECONDS);
 
-
-
-            if (Double.compare(doubleVal1, doubleVal2) != 0) {
-                counter1.increment();
-            }
-
             if (Double.compare(doubleVal3, doubleVal2) != 0) {
                 counter2.increment();
-                System.out.println("Error value clac3 = " + value3 + " value2 = " + value2);
+                System.out.println("Error value clac3 = " + value3 + " bigD = " + value2);
+                System.out.println(calc3.getOp());
             }
     }
 
