@@ -5,7 +5,9 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
+import java.sql.SQLOutput;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -25,9 +27,12 @@ public class CalcRunner implements Runnable {
     Counter counter2;
 
     public CalcRunner(MeterRegistry meterRegistry) {
-        this.timer1 = meterRegistry.timer("calc1-elapsed-time", "name", "calc1");;
-        this.timer2 = meterRegistry.timer("bigd-elapsed-time", "name", "bigd");;
-        this.timer3 = meterRegistry.timer("calc2-elapsed-time", "name", "calc2");;
+        this.timer1 = meterRegistry.timer("calc1-elapsed-time", "name", "calc1");
+        ;
+        this.timer2 = meterRegistry.timer("bigd-elapsed-time", "name", "bigd");
+        ;
+        this.timer3 = meterRegistry.timer("calc2-elapsed-time", "name", "calc2");
+        ;
 
 
         counter1 = meterRegistry.counter("calc1-error", "name", "calc1");
@@ -37,21 +42,22 @@ public class CalcRunner implements Runnable {
     @Override
     public void run() {
 
-            double value1 = cleanDouble(zeroSafe(random.nextDouble(), random));
-            double value2 = cleanDouble(zeroSafe(random.nextDouble(), random));
-            double value3 = cleanDouble(zeroSafe(random.nextDouble(), random));
-            double value4 = cleanDouble(zeroSafe(random.nextDouble(), random));
+        double value1 = cleanDouble(zeroSafe(random.nextDouble(), random));
+        double value2 = cleanDouble(zeroSafe(random.nextDouble(), random));
+        double value3 = cleanDouble(zeroSafe(random.nextDouble(), random));
+        double value4 = cleanDouble(zeroSafe(random.nextDouble(), random));
 
 
             long gap2Start = System.currentTimeMillis();
-            double doubleVal2 = doubleToBigD(value1)
-                    .multiply(doubleToBigD(value2))
-                    .multiply(doubleToBigD(value3))
-                    .multiply(doubleToBigD(value4))
-                    .setScale(4, RoundingMode.HALF_UP)
+        BigDecimal bigDAnswer = doubleToBigD(value1)
+                .multiply(doubleToBigD(value2))
+                .multiply(doubleToBigD(value3))
+                .multiply(doubleToBigD(value4))
+                .setScale(4, RoundingMode.HALF_UP);
+        double doubleVal2 = bigDAnswer
                     .doubleValue();
 
-            long gap2End = System.currentTimeMillis();
+        long gap2End = System.currentTimeMillis();
 
         long gap3Start = System.currentTimeMillis();
         Calc3 calc3 = Calc3.init(value1)
@@ -64,20 +70,33 @@ public class CalcRunner implements Runnable {
         long gap3End = System.currentTimeMillis();
 
 
-            long gap2 = gap2End - gap2Start;
-            long gap3 = gap3End - gap3Start;
+        long gap2 = gap2End - gap2Start;
+        long gap3 = gap3End - gap3Start;
 
-            total++;
+        total++;
 
 
-            timer2.record(gap2, TimeUnit.MILLISECONDS);
-            timer3.record(gap3, TimeUnit.MILLISECONDS);
+        timer2.record(gap2, TimeUnit.MILLISECONDS);
+        timer3.record(gap3, TimeUnit.MILLISECONDS);
 
-            if (Double.compare(doubleVal3, doubleVal2) != 0) {
-                counter2.increment();
-                System.out.println("Error value clac3 = " + value3 + " bigD = " + value2);
-                System.out.println(calc3.getOp());
-            }
+        if (Double.compare(doubleVal3, doubleVal2) != 0) {
+            counter2.increment();
+           /* System.out.println(String.format("value 1 = %s, value 2 = %s, value3 = %s, value4 = %s ",
+                    doubleToBigD(value1),
+                    doubleToBigD(value2),
+                    doubleToBigD(value3),
+                    doubleToBigD(value4)
+            ));
+            System.out.println("Error value clac3 = " + doubleVal3 + " bigD = " + doubleVal2);
+            System.out.println(calc3.getOp());*/
+            System.out.println(String.format("%s, %s, %s, %s, %s",
+                    doubleToBigD(value1),
+                    doubleToBigD(value2),
+                    doubleToBigD(value3),
+                    doubleToBigD(value4),
+                    bigDAnswer
+            ));
+        }
     }
 
     public static double zeroSafe(double value, Random random) {

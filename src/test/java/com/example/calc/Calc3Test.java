@@ -2,6 +2,7 @@ package com.example.calc;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.CsvSource;
 
 
@@ -39,5 +40,21 @@ class Calc3Test {
     void divide(double value1, double value2, double answer) {
         int compare = Double.compare(Calc3.init(value1).divide(value2).getValue(), answer);
         Assertions.assertEquals(0, compare);
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = {
+            "multiply_errors.csv"
+    })
+    void multiply2(double value1, double value2, double value3, double value4, double answer) {
+        Calc3 calc3 = Calc3.init(value1)
+                .multiply(value2)
+                .multiply(value3)
+                .multiply(value4);
+
+        double doubleVal3 = calc3
+                .getValue();
+
+        Assertions.assertEquals(answer, doubleVal3);
     }
 }

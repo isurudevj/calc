@@ -1,6 +1,10 @@
 package com.example.calc;
 
 public class Calc3 {
+
+    private static long PRECISION = 10_000;
+    private static long OVERFLOW = 10_000;
+
     private long currentValue;
     private String op;
 
@@ -40,7 +44,7 @@ public class Calc3 {
     }
 
     public double getValue() {
-        return (currentValue * 1.0) / 10_000;
+        return (Math.round(((currentValue * 1.0) / (PRECISION * OVERFLOW) ) * PRECISION) * 1.0) / PRECISION;
     }
 
     public String getOp() {
@@ -48,7 +52,7 @@ public class Calc3 {
     }
 
     public long convertLong(double val) {
-        return Math.round(val * 10_000);
+        return Math.round(val * PRECISION * OVERFLOW);
     }
 
     public long convertLong(double val, int multiplier) {
