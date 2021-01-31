@@ -62,14 +62,14 @@ public class CalcRunner implements Runnable {
         long gap2End = System.currentTimeMillis();
 
         long gap3Start = System.currentTimeMillis();
-        Calc3 calc3 = Calc3.init(value1)
+        Calc4 calc4 = Calc4.init(value1)
                 .multiply(value2)
                 .subtract(value4)
                 .multiply(value3)
                 .add(value2)
                 .multiply(value4);
 
-        double doubleVal3 = calc3
+        double doubleVal3 = calc4
                 .getValue();
         long gap3End = System.currentTimeMillis();
 

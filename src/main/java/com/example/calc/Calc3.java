@@ -3,7 +3,7 @@ package com.example.calc;
 public class Calc3 {
 
     private static long PRECISION = 10_000;
-    private static long OVERFLOW = 100_000;
+    private static long OVERFLOW = 1000;
 
     private long currentValue;
     private String op;
@@ -44,7 +44,7 @@ public class Calc3 {
     }
 
     public double getValue() {
-        return (Math.round(((currentValue * 1.0) / (PRECISION * OVERFLOW) ) * PRECISION) * 1.0) / PRECISION;
+        return (Math.round((currentValue * 1.0) / OVERFLOW)) * 1.0 / PRECISION;
     }
 
     public String getOp() {

@@ -48,12 +48,21 @@ class Calc3Test {
     })
     //@CsvSource(value = "0.0993, 0.5845, 0.0417, 0.5991, 0.0015")
     void multiply2(double value1, double value2, double value3, double value4, double answer) {
-        Calc3 calc3 = Calc3.init(value1)
+        Calc4 calc4 = Calc4.init(value1)
                 .multiply(value2)
+                .subtract(value4)
                 .multiply(value3)
+                .add(value2)
                 .multiply(value4);
 
-        double doubleVal3 = calc3
+        Calc3 calc3 = Calc3.init(value1)
+                .multiply(value2)
+                .subtract(value4)
+                .multiply(value3)
+                .add(value2)
+                .multiply(value4);
+
+        double doubleVal3 = calc4
                 .getValue();
 
         System.out.println(calc3.getOp());
