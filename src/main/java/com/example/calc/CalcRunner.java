@@ -25,12 +25,12 @@ public class CalcRunner implements Runnable {
     Counter counter2;
 
     public CalcRunner(MeterRegistry meterRegistry) {
-        this.timer1 = meterRegistry.timer("calc-elapsed-time", "name", "calc1");;
-        this.timer2 = meterRegistry.timer("bigd-elapsed-time", "name", "calc2");;
-        this.timer3 = meterRegistry.timer("calc2-elapsed-time", "name", "calc1");;
+        this.timer1 = meterRegistry.timer("calc1-elapsed-time", "name", "calc1");;
+        this.timer2 = meterRegistry.timer("bigd-elapsed-time", "name", "bigd");;
+        this.timer3 = meterRegistry.timer("calc2-elapsed-time", "name", "calc2");;
 
 
-        counter1 = meterRegistry.counter("calc-error", "name", "calc1");
+        counter1 = meterRegistry.counter("calc1-error", "name", "calc1");
         counter2 = meterRegistry.counter("calc2-error", "name", "calc2");
     }
 
@@ -43,7 +43,7 @@ public class CalcRunner implements Runnable {
             double value4 = cleanDouble(zeroSafe(random.nextDouble(), random));
 
             long gap1Start = System.currentTimeMillis();
-            double doubleVal1 = Calc.init(value1)
+            double doubleVal1 = Calc1.init(value1)
                     .subtract(value2)
                     .subtract(value2)
                     .subtract(value2)
@@ -63,10 +63,10 @@ public class CalcRunner implements Runnable {
                     .subtract(doubleToBigD(value2))
                     .subtract(doubleToBigD(value2))
                     .subtract(doubleToBigD(value2))
-                    .multiply(doubleToBigD(value3))
+                    //.multiply(doubleToBigD(value3))
                     //.divide(doubleToBigD(value4), 4, RoundingMode.HALF_UP)
-                    .multiply(doubleToBigD(value3))
-                    .multiply(doubleToBigD(value3))
+                    //.multiply(doubleToBigD(value3))
+                    //.multiply(doubleToBigD(value3))
                     .add(doubleToBigD(value4))
                     .add(doubleToBigD(value4))
                     //.divide(doubleToBigD(value4), 4, RoundingMode.HALF_UP)
@@ -76,14 +76,14 @@ public class CalcRunner implements Runnable {
             long gap2End = System.currentTimeMillis();
 
         long gap3Start = System.currentTimeMillis();
-        double doubleVal3 = Calc2.init(value1)
+        double doubleVal3 = Calc3.init(value1)
                 .subtract(value2)
                 .subtract(value2)
                 .subtract(value2)
-                .multiply(value3)
+                //.multiply(value3)
                 //.divide(value4)
-                .multiply(value3)
-                .multiply(value3)
+                //.multiply(value3)
+                //.multiply(value3)
                 .add(value4)
                 .add(value4)
                 //.divide(value4)
@@ -110,7 +110,7 @@ public class CalcRunner implements Runnable {
 
             if (Double.compare(doubleVal3, doubleVal2) != 0) {
                 counter2.increment();
-                System.out.println("Error value1 = " + value3 + " value2 = " + value2);
+                System.out.println("Error value clac3 = " + value3 + " value2 = " + value2);
             }
     }
 
