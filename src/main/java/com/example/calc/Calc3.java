@@ -3,7 +3,7 @@ package com.example.calc;
 public class Calc3 {
 
     private static long PRECISION = 10_000;
-    private static long OVERFLOW = 10_000;
+    private static long OVERFLOW = 100_000;
 
     private long currentValue;
     private String op;
@@ -30,7 +30,7 @@ public class Calc3 {
     }
 
     public Calc3 multiply(double value) {
-        currentValue = Math.round(currentValue * value);
+        currentValue = Math.round(Math.floor(currentValue * value));
         op = "((" + op + ")" + " * " + value + ")";
         return this;
     }

@@ -51,7 +51,9 @@ public class CalcRunner implements Runnable {
             long gap2Start = System.currentTimeMillis();
         BigDecimal bigDAnswer = doubleToBigD(value1)
                 .multiply(doubleToBigD(value2))
+                .subtract(doubleToBigD(value4))
                 .multiply(doubleToBigD(value3))
+                .add(doubleToBigD(value2))
                 .multiply(doubleToBigD(value4))
                 .setScale(4, RoundingMode.HALF_UP);
         double doubleVal2 = bigDAnswer
@@ -62,7 +64,9 @@ public class CalcRunner implements Runnable {
         long gap3Start = System.currentTimeMillis();
         Calc3 calc3 = Calc3.init(value1)
                 .multiply(value2)
+                .subtract(value4)
                 .multiply(value3)
+                .add(value2)
                 .multiply(value4);
 
         double doubleVal3 = calc3

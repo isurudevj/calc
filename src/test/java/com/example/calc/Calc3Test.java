@@ -44,8 +44,9 @@ class Calc3Test {
 
     @ParameterizedTest
     @CsvFileSource(resources = {
-            "multiply_errors.csv"
+            "/samples/multiply_errors.csv"
     })
+    //@CsvSource(value = "0.0993, 0.5845, 0.0417, 0.5991, 0.0015")
     void multiply2(double value1, double value2, double value3, double value4, double answer) {
         Calc3 calc3 = Calc3.init(value1)
                 .multiply(value2)
@@ -54,6 +55,8 @@ class Calc3Test {
 
         double doubleVal3 = calc3
                 .getValue();
+
+        System.out.println(calc3.getOp());
 
         Assertions.assertEquals(answer, doubleVal3);
     }
