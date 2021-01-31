@@ -4,7 +4,7 @@ public class Calc4 {
 
     private double currentValue;
     private final int precision = 10_000;
-    private final int overflow = 10_0000;
+    private final int overflow = 1;
 
     public Calc4(double currentValue) {
         this.currentValue = cleanDouble(currentValue);
@@ -35,11 +35,12 @@ public class Calc4 {
     }
 
     public double getValue() {
-        double val1 = Math.floor(
+        /*double val1 = Math.floor(
                 ((Math.round(currentValue * precision * overflow) * 1.0) / overflow) + 0.5
         );
 
-        return (Math.round(val1 * 1.0) * 1.0) / precision;
+        return (Math.round(val1 * 1.0) * 1.0) / precision;*/
+        return Math.floor(currentValue * precision + 0.5) / precision;
     }
 
     public double cleanDouble(double val) {
