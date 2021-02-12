@@ -44,12 +44,14 @@ public class CalcRunner implements Runnable {
 
             long gap1Start = System.currentTimeMillis();
 
+            int dividePrecision = scale * 10;
+
             double bigDAnswer = doubleToBigD(value1, scale)
                     .multiply(doubleToBigD(value2, scale))
-                    .divide(doubleToBigD(value1, scale), new MathContext(scale + 8, RoundingMode.HALF_UP))
+                    .divide(doubleToBigD(value1, scale), new MathContext(dividePrecision, RoundingMode.HALF_UP))
                     .subtract(doubleToBigD(value4, scale))
                     .multiply(doubleToBigD(value3, scale))
-                    .divide(doubleToBigD(value5, scale), new MathContext(scale + 8, RoundingMode.HALF_UP))
+                    .divide(doubleToBigD(value5, scale), new MathContext(dividePrecision, RoundingMode.HALF_UP))
                     .add(doubleToBigD(value2, scale))
                     .multiply(doubleToBigD(value4, scale))
                     .setScale(scale, RoundingMode.HALF_UP)
@@ -61,10 +63,10 @@ public class CalcRunner implements Runnable {
 
             CalcSpec calc = new OpsPrinter(Calc.init(value1), scale)
                     .multiply(value2)
-                    .divide(value1, scale + 8)
+                    .divide(value1, dividePrecision)
                     .subtract(value4)
                     .multiply(value3)
-                    .divide(value5, scale + 8)
+                    .divide(value5, dividePrecision)
                     .add(value2)
                     .multiply(value4);
 

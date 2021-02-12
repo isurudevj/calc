@@ -31,7 +31,6 @@ public class Calc implements CalcSpec {
 
     public Calc divide(double value, int precision) {
         currentValue = currentValue / value;
-        currentValue = getValue(precision);
         return this;
     }
 
