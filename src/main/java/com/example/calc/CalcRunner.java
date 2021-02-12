@@ -94,8 +94,6 @@ public class CalcRunner implements Runnable {
                         doubleToBigD(value5, scale),
                         bigDAnswer
                 ));
-                System.out.println(calc.toString());
-                System.out.println(calcAnswer);
             }
         } catch (Exception e) {
             System.out.println(String.format("%s, %s, %s, %s, %s", value1, value2, value3, value4, value5));
