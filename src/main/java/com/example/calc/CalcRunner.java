@@ -1,5 +1,6 @@
 package com.example.calc;
 
+import com.example.CalcSpec;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
@@ -30,72 +31,81 @@ public class CalcRunner implements Runnable {
 
     @Override
     public void run() {
+
         int scale = 4;
 
-        double value1 = cleanDouble(zeroSafe(random.nextDouble(), random), scale);
-        double value2 = cleanDouble(zeroSafe(random.nextDouble(), random), scale);
-        double value3 = cleanDouble(zeroSafe(random.nextDouble(), random), scale);
-        double value4 = cleanDouble(zeroSafe(random.nextDouble(), random), scale);
-        double value5 = cleanDouble(zeroSafe(random.nextDouble(), random), scale);
+        double value1 = cleanDouble(zeroSafe(random.nextDouble(), random, scale), scale);
+        double value2 = cleanDouble(zeroSafe(random.nextDouble(), random, scale), scale);
+        double value3 = cleanDouble(zeroSafe(random.nextDouble(), random, scale), scale);
+        double value4 = cleanDouble(zeroSafe(random.nextDouble(), random, scale), scale);
+        double value5 = cleanDouble(zeroSafe(random.nextDouble(), random, scale), scale);
+
+        try {
+
+            long gap1Start = System.currentTimeMillis();
+
+            double bigDAnswer = doubleToBigD(value1, scale)
+                    .multiply(doubleToBigD(value2, scale))
+                    .divide(doubleToBigD(value1, scale), new MathContext(scale + 8, RoundingMode.HALF_UP))
+                    .subtract(doubleToBigD(value4, scale))
+                    .multiply(doubleToBigD(value3, scale))
+                    .divide(doubleToBigD(value5, scale), new MathContext(scale + 8, RoundingMode.HALF_UP))
+                    .add(doubleToBigD(value2, scale))
+                    .multiply(doubleToBigD(value4, scale))
+                    .setScale(scale, RoundingMode.HALF_UP)
+                    .doubleValue();
+
+            long gap1End = System.currentTimeMillis();
+
+            long gap2Start = System.currentTimeMillis();
+
+            CalcSpec calc = new OpsPrinter(Calc.init(value1), scale)
+                    .multiply(value2)
+                    .divide(value1, scale + 8)
+                    .subtract(value4)
+                    .multiply(value3)
+                    .divide(value5, scale + 8)
+                    .add(value2)
+                    .multiply(value4);
+
+            double calcAnswer = calc.getValue(scale);
+
+            long gap2End = System.currentTimeMillis();
 
 
-        long gap1Start = System.currentTimeMillis();
+            long gap1 = gap1End - gap1Start;
+            long gap2 = gap2End - gap2Start;
 
-        double bigDAnswer = doubleToBigD(value1, scale)
-                .multiply(doubleToBigD(value2, scale))
-                .divide(doubleToBigD(value1, scale), new MathContext(scale + 4, RoundingMode.HALF_UP))
-                .subtract(doubleToBigD(value4, scale))
-                .multiply(doubleToBigD(value3, scale))
-                .divide(doubleToBigD(value5, scale), new MathContext(scale + 4, RoundingMode.HALF_UP))
-                .add(doubleToBigD(value2, scale))
-                .multiply(doubleToBigD(value4, scale))
-                .setScale(scale, RoundingMode.HALF_UP)
-                .doubleValue();
+            total++;
 
-        long gap1End = System.currentTimeMillis();
+            timer1.record(gap1, TimeUnit.MILLISECONDS);
+            timer2.record(gap2, TimeUnit.MILLISECONDS);
 
-        long gap2Start = System.currentTimeMillis();
+            if (Double.compare(calcAnswer, bigDAnswer) != 0) {
+                counter1.increment();
 
-        Calc calc = Calc.init(value1)
-                .multiply(value2)
-                .divide(value1, scale + 4)
-                .subtract(value4)
-                .multiply(value3)
-                .divide(value5, scale + 4)
-                .add(value2)
-                .multiply(value4);
-
-        double calcAnswer = calc.getValue(scale);
-
-        long gap2End = System.currentTimeMillis();
-
-
-        long gap1 = gap1End - gap1Start;
-        long gap2 = gap2End - gap2Start;
-
-        total++;
-
-        timer1.record(gap1, TimeUnit.MILLISECONDS);
-        timer2.record(gap2, TimeUnit.MILLISECONDS);
-
-        if (Double.compare(calcAnswer, bigDAnswer) != 0) {
-            counter1.increment();
-
-            System.out.println(String.format("%s, %s, %s, %s, %s, %s",
-                    doubleToBigD(value1, scale),
-                    doubleToBigD(value2, scale),
-                    doubleToBigD(value3, scale),
-                    doubleToBigD(value4, scale),
-                    doubleToBigD(value5, scale),
-                    bigDAnswer
-            ));
+                System.out.println(String.format("%s, %s, %s, %s, %s, %s",
+                        doubleToBigD(value1, scale),
+                        doubleToBigD(value2, scale),
+                        doubleToBigD(value3, scale),
+                        doubleToBigD(value4, scale),
+                        doubleToBigD(value5, scale),
+                        bigDAnswer
+                ));
+                System.out.println(calc.toString());
+                System.out.println(calcAnswer);
+            }
+        } catch (Exception e) {
+            System.out.println(String.format("%s, %s, %s, %s, %s", value1, value2, value3, value4, value5));
+            e.printStackTrace();
         }
 
     }
 
-    public static double zeroSafe(double value, Random random) {
-        if (Double.compare(value, 0.0f) == 0) {
-            return zeroSafe(random.nextDouble(), random);
+    public static double zeroSafe(double value, Random random, int scale) {
+        long multiplier = Math.round(Math.pow(10, scale));
+        if (Math.round(value * multiplier) == 0) {
+            return zeroSafe(random.nextDouble(), random, scale);
         } else {
             return value;
         }
