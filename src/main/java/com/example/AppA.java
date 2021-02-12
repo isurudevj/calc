@@ -2,7 +2,6 @@ package com.example;
 
 import com.example.calc.CalcRunner;
 import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.Timer;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,8 +27,6 @@ public class AppA implements CommandLineRunner {
 
         CalcRunner calcRunner = new CalcRunner(meterRegistry);
         Executors.newSingleThreadScheduledExecutor()
-                .scheduleWithFixedDelay(calcRunner, 1, 1, TimeUnit.MILLISECONDS);
-
-        Thread.currentThread().join();
+                .scheduleAtFixedRate(calcRunner, 1, 1, TimeUnit.MILLISECONDS);
     }
 }
