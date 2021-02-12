@@ -43,10 +43,10 @@ public class CalcRunner implements Runnable {
 
         double bigDAnswer = doubleToBigD(value1, scale)
                 .multiply(doubleToBigD(value2, scale))
-                .divide(doubleToBigD(value1, scale), new MathContext(scale, RoundingMode.HALF_UP))
+                .divide(doubleToBigD(value1, scale), new MathContext(scale + 4, RoundingMode.HALF_UP))
                 .subtract(doubleToBigD(value4, scale))
                 .multiply(doubleToBigD(value3, scale))
-                .divide(doubleToBigD(value5, scale), new MathContext(scale, RoundingMode.HALF_UP))
+                .divide(doubleToBigD(value5, scale), new MathContext(scale + 4, RoundingMode.HALF_UP))
                 .add(doubleToBigD(value2, scale))
                 .multiply(doubleToBigD(value4, scale))
                 .setScale(scale, RoundingMode.HALF_UP)
@@ -58,10 +58,10 @@ public class CalcRunner implements Runnable {
 
         Calc calc = Calc.init(value1)
                 .multiply(value2)
-                .divide(value1, scale)
+                .divide(value1, scale + 4)
                 .subtract(value4)
                 .multiply(value3)
-                .divide(value5, scale)
+                .divide(value5, scale + 4)
                 .add(value2)
                 .multiply(value4);
 

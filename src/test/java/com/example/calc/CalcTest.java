@@ -70,10 +70,10 @@ class CalcTest {
 
         CalcSpec calc = new OpsPrinter(Calc.init(value1), 4)
                 .multiply(value2)
-                .divide(value1, scale)
+                .divide(value1, scale + 1)
                 .subtract(value4)
                 .multiply(value3)
-                .divide(value5, scale)
+                .divide(value5, scale + 1)
                 .add(value2)
                 .multiply(value4);
 
