@@ -18,7 +18,6 @@ public class CalcRunner implements Runnable {
     private Timer timer2;
 
     Counter counter1;
-    Counter counter2;
 
     public CalcRunner(MeterRegistry meterRegistry) {
 
