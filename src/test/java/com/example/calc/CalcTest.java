@@ -1,6 +1,7 @@
 package com.example.calc;
 
 import com.example.CalcSpec;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,6 +13,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 
 
+@Slf4j
 class CalcTest {
 
     @ParameterizedTest
@@ -82,36 +84,9 @@ class CalcTest {
                 .add(value2)
                 .multiply(value4);
 
-        int dividePrecision = scale * 200;
-
-        double bigDAnswer = doubleToBigD(value1, scale)
-                .multiply(doubleToBigD(value2, scale))
-                .divide(doubleToBigD(value1, scale), new MathContext(dividePrecision, RoundingMode.HALF_UP))
-                .subtract(doubleToBigD(value4, scale))
-                .multiply(doubleToBigD(value3, scale))
-                .divide(doubleToBigD(value5, scale), new MathContext(dividePrecision, RoundingMode.HALF_UP))
-                .add(doubleToBigD(value2, scale))
-                .multiply(doubleToBigD(value4, scale))
-                .setScale(scale, RoundingMode.HALF_UP)
-                .doubleValue();
-
-        System.out.println(calc.toString());
-        System.out.println(calc.getValue());
-        Assertions.assertEquals(bigDAnswer, calc.getValue(scale));
-    }
-
-    @Test
-    public void test() {
-        Assertions.assertEquals(745.0434, Calc.init(745.0433499999999).getValue(4));
-    }
-
-    public static double cleanDouble(double value, int precision) {
-        long denominator = Math.round(Math.pow(10, precision));
-        return (double) Math.round(value * denominator) / denominator;
-    }
-
-    public static BigDecimal doubleToBigD(double value, int scale) {
-        return new BigDecimal(value).setScale(scale, RoundingMode.HALF_UP);
+        log.info(calc.toString());
+        log.info("{}", calc.getValue());
+        Assertions.assertEquals(answer, calc.getValue(scale));
     }
 
 }
