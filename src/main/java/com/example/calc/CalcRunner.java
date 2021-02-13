@@ -4,6 +4,7 @@ import com.example.CalcSpec;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
+import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -11,6 +12,7 @@ import java.math.RoundingMode;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public class CalcRunner implements Runnable {
 
     Random random = new Random();
@@ -44,7 +46,7 @@ public class CalcRunner implements Runnable {
 
             long gap1Start = System.currentTimeMillis();
 
-            int dividePrecision = scale * 10;
+            int dividePrecision = scale * 20;
 
             double bigDAnswer = doubleToBigD(value1, scale)
                     .multiply(doubleToBigD(value2, scale))
@@ -86,18 +88,17 @@ public class CalcRunner implements Runnable {
             if (Double.compare(calcAnswer, bigDAnswer) != 0) {
                 counter1.increment();
 
-                System.out.println(String.format("%s, %s, %s, %s, %s, %s",
+                log.info("{}, {}, {}, {}, {}, {}",
                         doubleToBigD(value1, scale),
                         doubleToBigD(value2, scale),
                         doubleToBigD(value3, scale),
                         doubleToBigD(value4, scale),
                         doubleToBigD(value5, scale),
-                        bigDAnswer
-                ));
+                        bigDAnswer);
             }
         } catch (Exception e) {
-            System.out.println(String.format("%s, %s, %s, %s, %s", value1, value2, value3, value4, value5));
-            e.printStackTrace();
+            log.info("{}, {}, {}, {}, {}", value1, value2, value3, value4, value5);
+            log.error("", e);
         }
 
     }

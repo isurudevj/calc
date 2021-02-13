@@ -12,4 +12,6 @@ public interface CalcSpec {
 
     double getValue(int precision);
 
+    double getValue();
+
 }

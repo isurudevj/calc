@@ -46,6 +46,11 @@ public class OpsPrinter implements CalcSpec {
     }
 
     @Override
+    public double getValue() {
+        return calc.getValue();
+    }
+
+    @Override
     public String toString() {
         return ops;
     }

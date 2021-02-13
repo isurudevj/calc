@@ -34,9 +34,20 @@ public class Calc implements CalcSpec {
         return this;
     }
 
-    public double getValue(int precision) {
-        long denominator = Math.round(Math.pow(10, precision));
-        return Math.floor(currentValue * denominator + 0.5) / denominator;
+    public double getValue(int scale) {
+        long denominator = Math.round(Math.pow(10, scale));
+        double epsilon = Math.pow(10, -1 * scale * 2);
+        int multiplier = currentValue > 0.0f ? 1 : -1;
+        double floor = Math.floor(Math.abs(currentValue) * denominator + 0.5 + epsilon);
+        if (floor == 0.0) {
+            return floor;
+        } else {
+            return (multiplier * floor) / denominator;
+        }
+    }
+
+    public double getValue() {
+        return currentValue;
     }
 
 }
