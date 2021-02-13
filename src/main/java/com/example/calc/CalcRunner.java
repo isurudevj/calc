@@ -46,7 +46,7 @@ public class CalcRunner implements Runnable {
 
             long gap1Start = System.currentTimeMillis();
 
-            int dividePrecision = scale * 20;
+            int dividePrecision = scale * 200;
 
             double bigDAnswer = doubleToBigD(value1, scale)
                     .multiply(doubleToBigD(value2, scale))
